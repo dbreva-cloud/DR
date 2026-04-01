@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+
+  <title>
+    {{ page_title }}
+    {%- if page_title != shop.name %} &ndash; {{ shop.name }}{% endif %}
+  </title>
+
+  {%- if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif %}
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Theme CSS -->
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+
+  <!-- Shopify required tag (must be in head) -->
+  {{ content_for_header }}
+</head>
+<body class="template-{{ template.name }}{% if template.suffix %} template-{{ template.name }}-{{ template.suffix }}{% endif %}">
+
+  <!-- Skip to content -->
+  <a class="wax-skip-link" href="#MainContent">Skip to content</a>
+
+  <!-- Header -->
+  {% section 'header' %}
+
+  <!-- Main content -->
+  <main id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  <!-- Footer -->
+  {% section 'footer' %}
+
+  <!-- Cart drawer + overlay (only when drawer mode is active) -->
+  {%- if settings.cart_type == 'drawer' -%}
+    <div id="cart-overlay" class="wax-cart-overlay" aria-hidden="true"></div>
+    <div id="cart-drawer" class="wax-cart-drawer" role="dialog" aria-label="Cart" aria-hidden="true">
+      <!-- Populated by theme.js -->
+    </div>
+  {%- endif -%}
+
+  <!-- Theme JS -->
+  <script>
+    window.Shopify = window.Shopify || {};
+    window.Shopify.cartType = {{ settings.cart_type | json }};
+    window.Shopify.moneyFormat = {{ shop.money_format | json }};
+  </script>
+  {{ 'theme.js' | asset_url | script_tag }}
+
+</body>
+</html>

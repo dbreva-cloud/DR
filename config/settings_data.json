@@ -1,0 +1,14 @@
+{
+  "current": {
+    "color_primary": "#3db6c4",
+    "color_dark": "#1a1a1a",
+    "color_kraft": "#c4a882",
+    "color_kraft_light": "#f5ede0",
+    "font_heading": "special_elite",
+    "font_body": "nunito",
+    "social_instagram": "",
+    "social_tiktok": "",
+    "cart_type": "drawer"
+  },
+  "presets": {}
+}

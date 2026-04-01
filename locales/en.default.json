@@ -1,0 +1,64 @@
+{
+  "general": {
+    "cart": {
+      "title": "Your Cart",
+      "empty": "Your cart is empty.",
+      "checkout": "Checkout",
+      "add_to_cart": "Add to Cart",
+      "view_cart": "View Cart",
+      "remove": "Remove",
+      "subtotal": "Subtotal"
+    },
+    "newsletter": {
+      "placeholder": "Email",
+      "submit": "Sign Up",
+      "success": "Thanks for subscribing!"
+    },
+    "pagination": {
+      "next": "Next",
+      "previous": "Previous"
+    },
+    "search": {
+      "placeholder": "Search..."
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "unavailable": "Unavailable",
+      "one_time": "One-Time Purchase",
+      "subscribe": "Subscribe & Save",
+      "save_badge": "SAVE {{ percent }}%",
+      "quantity": "Quantity",
+      "vendor": "Brand",
+      "sku": "SKU"
+    }
+  },
+  "sections": {
+    "hero": {
+      "default_heading": "Better Wax for Surfers and the Ocean."
+    },
+    "subscribe_save": {
+      "heading": "Subscribe & Save"
+    },
+    "testimonials": {
+      "heading": "Trusted By Pros"
+    },
+    "brand_difference": {
+      "heading": "The Wax Project Difference"
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "All Products"
+    }
+  },
+  "pages": {
+    "404": {
+      "title": "Page Not Found",
+      "message": "Sorry, the page you were looking for doesn't exist.",
+      "back": "Back to Home"
+    }
+  }
+}

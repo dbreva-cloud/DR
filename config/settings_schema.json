@@ -1,0 +1,97 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Wax Project",
+    "theme_version": "1.0.0",
+    "theme_author": "Wax Project",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary (Teal)",
+        "default": "#3db6c4"
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Dark Background",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "color_kraft",
+        "label": "Kraft / Tan Accent",
+        "default": "#c4a882"
+      },
+      {
+        "type": "color",
+        "id": "color_kraft_light",
+        "label": "Light Beige Background",
+        "default": "#f5ede0"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "select",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "options": [
+          { "value": "special_elite", "label": "Special Elite (Recommended)" },
+          { "value": "permanent_marker", "label": "Permanent Marker" },
+          { "value": "oswald", "label": "Oswald" }
+        ],
+        "default": "special_elite",
+        "info": "Heading font is loaded from Google Fonts."
+      },
+      {
+        "type": "select",
+        "id": "font_body",
+        "label": "Body Font",
+        "options": [
+          { "value": "nunito", "label": "Nunito (Recommended)" },
+          { "value": "lato", "label": "Lato" },
+          { "value": "open_sans", "label": "Open Sans" }
+        ],
+        "default": "nunito"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart Type",
+        "options": [
+          { "value": "drawer", "label": "Drawer (Slide-in)" },
+          { "value": "page", "label": "Cart Page" }
+        ],
+        "default": "drawer"
+      }
+    ]
+  }
+]
