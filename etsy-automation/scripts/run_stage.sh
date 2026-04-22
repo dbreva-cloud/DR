@@ -16,7 +16,8 @@ STAGE="${1:-help}"
 SLUG="${2:-}"
 
 # ── Helper: run a Claude agent in non-interactive print mode ─────────────────
-# Reads the agent .md file, strips YAML front matter, passes body as system prompt
+# Reads the agent .md file, strips YAML front matter, combines with task prompt,
+# and pipes everything via stdin (works with all Claude Code versions).
 run_agent() {
   local agent="$1"
   local prompt="$2"
@@ -28,16 +29,22 @@ run_agent() {
   fi
 
   # Extract everything after the second --- (YAML front matter)
-  local system_prompt
-  system_prompt=$(awk 'BEGIN{n=0} /^---/{n++; next} n>=2{print}' "$agent_file")
+  local instructions
+  instructions=$(awk 'BEGIN{n=0} /^---/{n++; next} n>=2{print}' "$agent_file")
 
+  # Combine instructions + task and pipe via stdin
   ETSY_WORKSPACE="$WORKSPACE" PRODUCT_SLUG="$SLUG" \
     "$CLAUDE" \
       --print \
-      --system-prompt "$system_prompt" \
       --dangerously-skip-permissions \
       --add-dir "$WORKSPACE" \
-      "$prompt"
+      <<EOF
+INSTRUCTIONS:
+$instructions
+
+TASK:
+$prompt
+EOF
 }
 
 # ── Stage dispatch ────────────────────────────────────────────────────────────
