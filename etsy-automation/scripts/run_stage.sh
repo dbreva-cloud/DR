@@ -56,6 +56,12 @@ case "$STAGE" in
       "Run trend research. WORKSPACE_ROOT=$WORKSPACE. Write the report to 01_trend_research/."
     ;;
 
+  ideas)
+    echo ">>> Generating daily product ideas"
+    run_agent "idea-generator" \
+      "Generate 3 new product ideas for today. WORKSPACE_ROOT=$WORKSPACE. Write to 00_daily_ideas/\$(date +%Y-%m-%d)-ideas.txt."
+    ;;
+
   concept)
     [[ -z "$SLUG" ]] && { echo "Usage: $0 concept <product-slug>"; exit 1; }
     echo ">>> Stage 2: Concept Brief for $SLUG"
@@ -130,6 +136,7 @@ USAGE:
   ./scripts/run_stage.sh <stage> [product-slug]
 
 STAGES:
+  ideas                 Generate 3 new product ideas for today
   research              Stage 1 — Trend research (no slug needed)
   concept  <slug>       Stage 2 — Concept brief
   prompts  <slug>       Stage 3 — Midjourney prompts
@@ -148,6 +155,7 @@ ENVIRONMENT:
                         (default: ~/Desktop/etsy-art-factory/workspace)
 
 EXAMPLES:
+  ./scripts/run_stage.sh ideas
   ./scripts/run_stage.sh research
   ./scripts/run_stage.sh concept night-market-neon
   ./scripts/run_stage.sh exports moody-desert-sun
