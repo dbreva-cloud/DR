@@ -16,14 +16,25 @@ STAGE="${1:-help}"
 SLUG="${2:-}"
 
 # ── Helper: run a Claude agent in non-interactive print mode ─────────────────
+# Reads the agent .md file, strips YAML front matter, passes body as system prompt
 run_agent() {
   local agent="$1"
   local prompt="$2"
+  local agent_file="$AGENTS_DIR/$agent.md"
+
+  if [[ ! -f "$agent_file" ]]; then
+    echo "ERROR: Agent file not found: $agent_file"
+    exit 1
+  fi
+
+  # Extract everything after the second --- (YAML front matter)
+  local system_prompt
+  system_prompt=$(awk 'BEGIN{n=0} /^---/{n++; next} n>=2{print}' "$agent_file")
+
   ETSY_WORKSPACE="$WORKSPACE" PRODUCT_SLUG="$SLUG" \
     "$CLAUDE" \
       --print \
-      --agent "$agent" \
-      --agents-dir "$AGENTS_DIR" \
+      --system-prompt "$system_prompt" \
       --dangerously-skip-permissions \
       --add-dir "$WORKSPACE" \
       "$prompt"
