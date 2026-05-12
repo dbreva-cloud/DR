@@ -3,33 +3,35 @@ import Combine
 
 @MainActor
 final class PlannerStore: ObservableObject {
-    @Published var todayPlan: DayPlan
-    @Published var weekPlans: [DayPlan] = []
+    @Published var todayPlan:          DayPlan
+    @Published var weekPlans:          [DayPlan] = []
     @Published var autoRecommendation: AutoModeRecommendation?
-    @Published var progressData: ProgressData = .sample()
-    @Published var recovery: RecoveryInput = RecoveryInput()
-    @Published var groceryList: GroceryList?
+    @Published var progressData:       ProgressData
+    @Published var recovery:           RecoveryInput
+    @Published var workoutHistory:     WorkoutHistory
+    @Published var groceryList:        GroceryList?
 
-    private let encoder = JSONEncoder()
-    private let decoder = JSONDecoder()
-    private let storageKey = "primeCut_weekPlans"
+    private let persistence = PersistenceManager.shared
 
     init() {
-        todayPlan = DayPlan(date: .now)
-        loadFromStorage()
-        if weekPlans.isEmpty {
-            seedWeek()
-        }
+        todayPlan      = DayPlan(date: .now)
+        progressData   = PersistenceManager.shared.load(ProgressData.self,  key: .progressData)   ?? ProgressData.sample()
+        recovery       = PersistenceManager.shared.load(RecoveryInput.self, key: .recovery)       ?? RecoveryInput()
+        workoutHistory = PersistenceManager.shared.load(WorkoutHistory.self, key: .workoutHistory) ?? WorkoutHistory()
+
+        loadWeekPlans()
+        if weekPlans.isEmpty { seedWeek() }
         syncTodayPlan()
+        todayPlan.ensureBaseMeals()
     }
 
-    // MARK: - Workout management
+    // MARK: - Workout planning
     func addOrUpdateWorkout(_ workout: Workout) {
         todayPlan.workout = workout
         todayPlan.generateMeals(from: workout)
         todayPlan.ensureBaseMeals()
         syncTodayToWeek()
-        save()
+        saveAll()
         NotificationManager.shared.scheduleMealReminders(for: todayPlan)
     }
 
@@ -37,7 +39,19 @@ final class PlannerStore: ObservableObject {
         todayPlan.workout = nil
         todayPlan.meals.removeAll { $0.timing.isWorkoutRelated }
         syncTodayToWeek()
-        save()
+        saveAll()
+    }
+
+    // MARK: - Workout history
+    func logWorkout(_ log: WorkoutLog) {
+        workoutHistory.log(log)
+        // Auto-check "Workout" checklist item if completed
+        if log.completed, let idx = todayPlan.checklist.firstIndex(where: { $0.label == "Workout" }),
+           !todayPlan.checklist[idx].isChecked {
+            todayPlan.checklist[idx].isChecked = true
+        }
+        syncTodayToWeek()
+        persistence.save(workoutHistory, key: .workoutHistory)
     }
 
     // MARK: - Checklist
@@ -48,7 +62,8 @@ final class PlannerStore: ObservableObject {
         }
         HapticManager.checkmark()
         syncTodayToWeek()
-        save()
+        saveAll()
+        pushSharedSnapshot()
     }
 
     // MARK: - Meal consumed
@@ -56,7 +71,7 @@ final class PlannerStore: ObservableObject {
         guard let idx = todayPlan.meals.firstIndex(where: { $0.id == id }) else { return }
         todayPlan.meals[idx].isConsumed = true
         syncTodayToWeek()
-        save()
+        saveAll()
     }
 
     // MARK: - Auto mode
@@ -81,6 +96,7 @@ final class PlannerStore: ObservableObject {
     // MARK: - Recovery
     func updateRecovery(_ input: RecoveryInput) {
         recovery = input
+        persistence.save(recovery, key: .recovery)
     }
 
     // MARK: - Progress data
@@ -95,23 +111,36 @@ final class PlannerStore: ObservableObject {
         )
         if !progressData.entries.contains(where: { Calendar.current.isDate($0.date, inSameDayAs: entry.date) }) {
             progressData.entries.append(entry)
-            if progressData.entries.count > 30 {
-                progressData.entries.removeFirst()
+            if progressData.entries.count > 90 {
+                progressData.entries.removeFirst(progressData.entries.count - 90)
             }
+        } else if let idx = progressData.entries.firstIndex(where: { Calendar.current.isDate($0.date, inSameDayAs: entry.date) }) {
+            progressData.entries[idx] = entry
         }
+        persistence.save(progressData, key: .progressData)
+    }
+
+    // MARK: - Shared snapshot (widget + watch)
+    func pushSharedSnapshot(steps: Double? = nil, settings: SettingsStore? = nil) {
+        let snap = SharedAppSnapshot(
+            stepCount: steps ?? todayPlan.steps,
+            stepGoal: settings?.stepGoal ?? 8000,
+            streakCount: settings?.streakCount ?? 0,
+            checklistItems: todayPlan.checklist.map {
+                SharedAppSnapshot.ChecklistSnapshot(label: $0.label, isChecked: $0.isChecked)
+            },
+            updatedAt: .now
+        )
+        SharedDataManager.write(snapshot: snap)
     }
 
     // MARK: - Persistence
-    func save() {
-        if let data = try? encoder.encode(weekPlans) {
-            UserDefaults.standard.set(data, forKey: storageKey)
-        }
+    func saveAll() {
+        persistence.save(weekPlans, key: .weekPlans)
     }
 
-    private func loadFromStorage() {
-        guard let data = UserDefaults.standard.data(forKey: storageKey),
-              let plans = try? decoder.decode([DayPlan].self, from: data) else { return }
-        weekPlans = plans
+    private func loadWeekPlans() {
+        weekPlans = persistence.load([DayPlan].self, key: .weekPlans) ?? []
     }
 
     private func syncTodayPlan() {
@@ -137,5 +166,12 @@ final class PlannerStore: ObservableObject {
             plan.ensureBaseMeals()
             return plan
         }
+    }
+}
+
+// Expose workout history computed props at store level for convenience
+extension PlannerStore {
+    func logsForCurrentWeek() -> [WorkoutLog] {
+        workoutHistory.logsForCurrentWeek()
     }
 }

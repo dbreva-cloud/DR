@@ -4,9 +4,11 @@ struct PlannerView: View {
     @EnvironmentObject var store: PlannerStore
     @EnvironmentObject var settings: SettingsStore
 
-    @State private var showAddWorkout = false
-    @State private var selectedDayOffset = 0  // 0 = today
-    @State private var showGroceryList = false
+    @State private var showAddWorkout    = false
+    @State private var selectedDayOffset = 0
+    @State private var showGroceryList   = false
+    @State private var showHistory       = false
+    @State private var selectedMeal: Meal? = nil
 
     private var selectedPlan: DayPlan {
         let target = Calendar.current.date(byAdding: .day, value: selectedDayOffset, to: Calendar.current.startOfDay(for: .now)) ?? .now
@@ -30,9 +32,12 @@ struct PlannerView: View {
                         .padding(.bottom, Theme.spacingSM)
 
                     // Timeline
-                    TimelineView(plan: selectedDayOffset == 0 ? store.todayPlan : selectedPlan)
-                        .padding(.horizontal, Theme.spacingMD)
-                        .animation(.springSnappy, value: selectedDayOffset)
+                    TimelineView(
+                        plan: selectedDayOffset == 0 ? store.todayPlan : selectedPlan,
+                        onMealTap: { meal in selectedMeal = meal }
+                    )
+                    .padding(.horizontal, Theme.spacingMD)
+                    .animation(.springSnappy, value: selectedDayOffset)
 
                     Spacer(minLength: 80)
                 }
@@ -47,6 +52,16 @@ struct PlannerView: View {
             }
             .sheet(isPresented: $showGroceryList) {
                 GroceryListSheet()
+                    .environmentObject(store)
+                    .environmentObject(settings)
+            }
+            .sheet(isPresented: $showHistory) {
+                WorkoutHistoryView()
+                    .environmentObject(store)
+                    .environmentObject(settings)
+            }
+            .sheet(item: $selectedMeal) { meal in
+                MealDetailSheet(meal: meal)
                     .environmentObject(store)
                     .environmentObject(settings)
             }
@@ -117,6 +132,17 @@ struct PlannerView: View {
             }
 
             Spacer()
+
+            // History
+            Button { showHistory = true } label: {
+                Image(systemName: "clock.arrow.circlepath")
+                    .font(.system(size: 16))
+                    .foregroundStyle(Theme.textSecondary)
+                    .padding(8)
+                    .background(Theme.surfaceHigh)
+                    .clipShape(Circle())
+            }
+            .buttonStyle(ScaleButtonStyle())
 
             // Grocery list
             Button {

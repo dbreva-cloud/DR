@@ -2,6 +2,9 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var store: PlannerStore
+    @EnvironmentObject var healthKit: HealthKitManager
+
     @State private var selectedTab: Tab = .dashboard
 
     enum Tab: Int {
@@ -12,6 +15,24 @@ struct ContentView: View {
     }
 
     var body: some View {
+        Group {
+            if !settings.onboardingComplete {
+                OnboardingView()
+                    .environmentObject(settings)
+                    .environmentObject(healthKit)
+                    .transition(.asymmetric(
+                        insertion: .opacity,
+                        removal: .scale(scale: 0.95).combined(with: .opacity)
+                    ))
+            } else {
+                mainApp
+                    .transition(.opacity)
+            }
+        }
+        .animation(.springSnappy, value: settings.onboardingComplete)
+    }
+
+    private var mainApp: some View {
         TabView(selection: $selectedTab) {
             DashboardView()
                 .tabItem {
@@ -27,7 +48,9 @@ struct ContentView: View {
 
             PrimeCutProgressView()
                 .tabItem {
-                    Label("Progress", systemImage: selectedTab == .progress ? "chart.line.uptrend.xyaxis.circle.fill" : "chart.line.uptrend.xyaxis.circle")
+                    Label("Progress", systemImage: selectedTab == .progress
+                          ? "chart.line.uptrend.xyaxis.circle.fill"
+                          : "chart.line.uptrend.xyaxis.circle")
                 }
                 .tag(Tab.progress)
 
@@ -39,14 +62,12 @@ struct ContentView: View {
         }
         .accentColor(settings.accentColor)
         .onAppear {
-            // Custom tab bar styling
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = UIColor(Theme.surface)
             appearance.shadowColor = UIColor(Theme.separator)
-
-            UITabBar.appearance().standardAppearance = appearance
-            UITabBar.appearance().scrollEdgeAppearance = appearance
+            UITabBar.appearance().standardAppearance    = appearance
+            UITabBar.appearance().scrollEdgeAppearance  = appearance
         }
     }
 }

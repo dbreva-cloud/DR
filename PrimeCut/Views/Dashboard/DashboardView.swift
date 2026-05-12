@@ -57,14 +57,14 @@ struct DashboardView: View {
             .onChange(of: healthKit.stepCount) { _, newSteps in
                 store.todayPlan.steps = newSteps
                 store.runAutoMode(steps: newSteps, settings: settings)
-
-                // Auto-check step goal
-                if newSteps >= settings.stepGoal {
-                    autoCheckStepGoal()
-                }
+                store.pushSharedSnapshot(steps: newSteps, settings: settings)
+                if newSteps >= settings.stepGoal { autoCheckStepGoal() }
             }
             .onChange(of: store.todayPlan.isComplete) { _, isComplete in
-                if isComplete { settings.recordDayCompletion() }
+                if isComplete {
+                    settings.recordDayCompletion()
+                    store.appendTodayToProgress()
+                }
             }
         }
     }

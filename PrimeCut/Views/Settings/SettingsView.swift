@@ -5,7 +5,9 @@ struct SettingsView: View {
     @EnvironmentObject var healthKit: HealthKitManager
     @EnvironmentObject var store: PlannerStore
 
+    @StateObject private var cloudKit = CloudKitManager.shared
     @State private var showStreakResetAlert = false
+    @State private var showHistory = false
     @State private var notificationsGranted = false
 
     var body: some View {
@@ -16,6 +18,9 @@ struct SettingsView: View {
                 List {
                     // Health
                     healthSection
+
+                    // iCloud
+                    iCloudSection
 
                     // Auto Mode
                     autoModeSection
@@ -46,6 +51,11 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text("Your \(settings.streakCount)-day streak will be cleared.")
+            }
+            .sheet(isPresented: $showHistory) {
+                WorkoutHistoryView()
+                    .environmentObject(store)
+                    .environmentObject(settings)
             }
             .task {
                 let granted = await NotificationManager.shared.requestAuthorization()
@@ -205,9 +215,47 @@ struct SettingsView: View {
         .listRowBackground(Theme.surface)
     }
 
+    // MARK: - iCloud section
+    private var iCloudSection: some View {
+        Section {
+            HStack(spacing: 12) {
+                settingsIcon("icloud.fill", color: .blue)
+                CloudSyncStatusView(cloudKit: cloudKit)
+                Spacer()
+                Button {
+                    Task {
+                        await cloudKit.saveWeekPlans(store.weekPlans)
+                        await cloudKit.saveProgressData(store.progressData)
+                    }
+                } label: {
+                    Text("Sync")
+                        .font(.labelLarge)
+                        .foregroundStyle(settings.accentColor)
+                }
+                .disabled(!cloudKit.iCloudAvailable)
+            }
+        } header: {
+            sectionHeader("iCloud")
+        }
+        .listRowBackground(Theme.surface)
+    }
+
     // MARK: - Data
     private var dataSection: some View {
         Section {
+            Button { showHistory = true } label: {
+                HStack {
+                    settingsIcon("clock.arrow.circlepath", color: settings.accentColor)
+                    Text("Workout History")
+                        .foregroundStyle(Theme.textPrimary)
+                    Spacer()
+                    Text("\(store.workoutHistory.logs.count)")
+                        .font(.labelLarge).foregroundStyle(Theme.textTertiary)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12)).foregroundStyle(Theme.textTertiary)
+                }
+            }
+
             Button {
                 store.generateGroceryList()
             } label: {

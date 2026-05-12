@@ -7,44 +7,128 @@ options:
   bundleIdPrefix: com.primecut
   deploymentTarget:
     iOS: "16.0"
+    watchOS: "9.0"
   xcodeVersion: "15.0"
   defaultConfig: Debug
+  groupSortPosition: top
 
 settings:
   base:
-    PRODUCT_BUNDLE_IDENTIFIER: com.primecut.app
-    MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.9"
-    ENABLE_BITCODE: NO
-    INFOPLIST_FILE: App/Info.plist
+    ENABLE_BITCODE: "NO"
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+
+configs:
+  Debug:   debug
+  Release: release
 
 targets:
+
+  # ─── Main iOS App ────────────────────────────────────────────────────────────
   PrimeCut:
     type: application
     platform: iOS
     deploymentTarget: "16.0"
     sources:
-      - path: .
+      - path: App
+      - path: Models
+      - path: Store
+      - path: Services
         excludes:
-          - "project.yml"
-          - "README.md"
+          - "Services/CloudKitManager.swift"   # added below
+      - path: Services/AutoModeEngine.swift
+      - path: Services/GroceryExporter.swift
+      - path: Services/HealthKitManager.swift
+      - path: Services/NotificationManager.swift
+      - path: Services/PersistenceManager.swift
+      - path: Services/CloudKitManager.swift
+      - path: Utilities
+      - path: Views
+        excludes:
+          - "Views/**/*.swift"   # override below
+      - path: Views/Dashboard
+      - path: Views/Onboarding
+      - path: Views/Planner
+      - path: Views/Progress
+      - path: Views/Settings
     settings:
       base:
         PRODUCT_NAME: PrimeCut
+        PRODUCT_BUNDLE_IDENTIFIER: com.primecut.app
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: App/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        DEVELOPMENT_TEAM: ""          # fill in your team ID
     capabilities:
       healthkit: {}
+      icloud:
+        cloudkit: true
+        containers:
+          - iCloud.com.primecut.app
+      push-notifications: {}
+      app-groups:
+        groups:
+          - group.com.primecut.app
+    dependencies:
+      - target: PrimeCutWidget
+        embed: true
+      - target: PrimeCutWatchApp
+        embed: true
     plist:
       path: App/Info.plist
     scheme:
       testTargets: []
 
+  # ─── Widget Extension ─────────────────────────────────────────────────────
+  PrimeCutWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: PrimeCutWidget
+    settings:
+      base:
+        PRODUCT_NAME: PrimeCutWidget
+        PRODUCT_BUNDLE_IDENTIFIER: com.primecut.app.widget
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: PrimeCutWidget/Info.plist
+        DEVELOPMENT_TEAM: ""
+    capabilities:
+      app-groups:
+        groups:
+          - group.com.primecut.app
+    dependencies: []
+
+  # ─── Apple Watch App ──────────────────────────────────────────────────────
+  PrimeCutWatchApp:
+    type: application
+    platform: watchOS
+    deploymentTarget: "9.0"
+    sources:
+      - path: PrimeCutWatch
+    settings:
+      base:
+        PRODUCT_NAME: PrimeCutWatch
+        PRODUCT_BUNDLE_IDENTIFIER: com.primecut.app.watchkitapp
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: PrimeCutWatch/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        DEVELOPMENT_TEAM: ""
+    capabilities:
+      app-groups:
+        groups:
+          - group.com.primecut.app
+
 schemes:
   PrimeCut:
     build:
       targets:
-        PrimeCut: all
+        PrimeCut:          all
+        PrimeCutWidget:    all
+        PrimeCutWatchApp:  all
     run:
       config: Debug
     test:
