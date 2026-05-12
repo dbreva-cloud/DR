@@ -1,0 +1,53 @@
+# XcodeGen project spec for Prime Cut
+# Run: xcodegen generate
+# Requires: brew install xcodegen
+
+name: PrimeCut
+options:
+  bundleIdPrefix: com.primecut
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+  defaultConfig: Debug
+
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: com.primecut.app
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    ENABLE_BITCODE: NO
+    INFOPLIST_FILE: App/Info.plist
+
+targets:
+  PrimeCut:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: .
+        excludes:
+          - "project.yml"
+          - "README.md"
+    settings:
+      base:
+        PRODUCT_NAME: PrimeCut
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    capabilities:
+      healthkit: {}
+    plist:
+      path: App/Info.plist
+    scheme:
+      testTargets: []
+
+schemes:
+  PrimeCut:
+    build:
+      targets:
+        PrimeCut: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    archive:
+      config: Release
