@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Cut — App Mockup</title>
+<style>
+  /* ─── Reset & Base ─────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0B0B0B;
+    --surface:   #141414;
+    --surfaceHi: #1C1C1E;
+    --accent:    #4CAF72;
+    --accentDim: #2D8B52;
+    --gold:      #C9A84C;
+    --text1:     #F5F5F5;
+    --text2:     #8E8E93;
+    --text3:     #48484A;
+    --sep:       #2C2C2E;
+    --danger:    #FF453A;
+    --bjj:       #4CAF72;
+    --strength:  #C9A84C;
+    --r-sm:  8px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+  }
+
+  body {
+    background: #050505;
+    color: var(--text1);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── Page layout ───────────────────────────────────────────────────── */
+  .page {
+    padding: 48px 32px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .brand-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .brand-header .logo {
+    display: inline-flex; align-items: center; gap: 14px;
+    margin-bottom: 16px;
+  }
+  .brand-header .logo-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--accent), var(--accentDim));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 0 32px rgba(76,175,114,.35);
+  }
+  .brand-header h1 {
+    font-size: 28px; font-weight: 900; letter-spacing: 6px;
+    color: var(--text1);
+  }
+  .brand-header p {
+    color: var(--text2); font-size: 16px; letter-spacing: .5px;
+  }
+
+  /* ─── Screen grid ────────────────────────────────────────────────────── */
+  .screens-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .screens-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .screens-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── Phone frame ────────────────────────────────────────────────────── */
+  .phone-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .phone-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--text3); text-transform: uppercase;
+  }
+  .phone {
+    width: 100%;
+    max-width: 296px;
+    background: #1a1a1c;
+    border-radius: 48px;
+    border: 2px solid #2a2a2e;
+    box-shadow:
+      0 0 0 1px #111,
+      0 32px 80px rgba(0,0,0,.9),
+      0 8px 24px rgba(0,0,0,.6),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    overflow: hidden;
+    position: relative;
+  }
+  .phone-notch {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 32px;
+    background: #1a1a1c;
+    border-radius: 20px;
+    z-index: 10;
+    border: 1.5px solid #222;
+  }
+  .phone-notch::after {
+    content: '';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #111;
+    border: 1px solid #222;
+  }
+  .phone-screen {
+    background: var(--bg);
+    border-radius: 46px;
+    overflow: hidden;
+    padding-top: 54px;
+    padding-bottom: 24px;
+    min-height: 620px;
+  }
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 28px 8px;
+    font-size: 11px; font-weight: 600; color: var(--text1);
+  }
+  .status-icons { display: flex; gap: 5px; align-items: center; }
+
+  /* ─── Nav bar ────────────────────────────────────────────────────────── */
+  .nav-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 20px 12px;
+  }
+  .nav-title { font-size: 13px; font-weight: 900; color: var(--accent); letter-spacing: 2px; }
+  .nav-subtitle { font-size: 10px; color: var(--text3); margin-top: 1px; }
+  .nav-chip {
+    background: rgba(76,175,114,.12);
+    color: var(--accent); font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 10px; letter-spacing: .5px;
+  }
+
+  /* ─── Scrollable content ─────────────────────────────────────────────── */
+  .screen-content { padding: 0 14px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* ─── Cards ──────────────────────────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 14px;
+    border: .5px solid var(--sep);
+  }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--text1); margin-bottom: 10px; }
+  .card-sub   { font-size: 11px; color: var(--text2); }
+
+  /* ─── Step ring ───────────────────────────────────────────────────────── */
+  .ring-hero {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px 14px 10px;
+    background: radial-gradient(ellipse at 50% 40%, rgba(76,175,114,.07) 0%, transparent 70%);
+  }
+  .ring-container {
+    position: relative; width: 148px; height: 148px; margin-bottom: 8px;
+  }
+  .ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: var(--surfaceHi); stroke-width: 14; }
+  .ring-progress {
+    fill: none;
+    stroke: url(#ringGrad);
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 408;
+    stroke-dashoffset: 408;
+    transition: stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1);
+  }
+  .ring-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+  }
+  .ring-steps { font-size: 22px; font-weight: 900; color: var(--text1); line-height: 1; }
+  .ring-label { font-size: 9px; color: var(--text3); margin-top: 2px; }
+  .ring-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* ─── Streak ──────────────────────────────────────────────────────────── */
+  .streak-row {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .streak-icon {
+    width: 42px; height: 42px;
+    background: rgba(255,149,0,.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .streak-num { font-size: 28px; font-weight: 900; color: var(--text1); }
+  .streak-word { font-size: 13px; font-weight: 600; color: var(--text2); margin-left: 4px; }
+  .streak-msg { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+  /* ─── Checklist ────────────────────────────────────────────────────────── */
+  .checklist { display: flex; flex-direction: column; gap: 2px; }
+  .check-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 2px;
+    border-bottom: .5px solid var(--sep);
+  }
+  .check-row:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 1.5px solid var(--sep);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 11px;
+    transition: all .2s;
+  }
+  .check-box.done {
+    background: rgba(76,175,114,.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .check-label {
+    font-size: 13px; color: var(--text1);
+    transition: all .2s;
+  }
+  .check-label.done { color: var(--text3); text-decoration: line-through; }
+
+  /* ─── Today plan card ──────────────────────────────────────────────────── */
+  .workout-row { display: flex; align-items: center; gap: 10px; }
+  .workout-icon {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .workout-icon.bjj      { background: rgba(76,175,114,.15); }
+  .workout-icon.strength { background: rgba(201,168,76,.15); }
+  .workout-name { font-size: 13px; font-weight: 700; color: var(--text1); }
+  .workout-time { font-size: 11px; color: var(--text2); }
+  .meal-key-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 0; border-top: .5px solid var(--sep); margin-top: 8px;
+  }
+  .meal-icon { font-size: 11px; width: 14px; color: var(--accent); }
+  .meal-name { font-size: 11px; color: var(--text1); flex: 1; }
+  .meal-time { font-size: 11px; font-weight: 700; color: var(--accent); }
+  .auto-bar {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(76,175,114,.08);
+    border-radius: 8px; padding: 7px 10px; margin-top: 8px;
+    font-size: 11px;
+  }
+  .auto-icon { color: var(--accent); font-size: 12px; }
+  .auto-text { color: var(--text1); font-weight: 600; }
+  .auto-sub  { color: var(--text2); margin-left: auto; }
+
+  /* ─── Tab bar ────────────────────────────────────────────────────────── */
+  .tab-bar {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 0 4px;
+    border-top: .5px solid var(--sep);
+    margin-top: 10px;
+  }
+  .tab-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; font-size: 9px; color: var(--text3); cursor: pointer;
+    transition: color .2s;
+  }
+  .tab-item.active { color: var(--accent); }
+  .tab-icon { font-size: 18px; line-height: 1; }
+
+  /* ─── Timeline (Planner) ─────────────────────────────────────────────── */
+  .timeline { position: relative; padding-left: 42px; display: flex; flex-direction: column; }
+  .tl-hour {
+    display: flex; align-items: flex-start; gap: 8px;
+    height: 44px; position: relative;
+  }
+  .tl-hour-label {
+    position: absolute; left: -42px; top: -6px;
+    font-size: 9px; color: var(--text3); width: 36px; text-align: right;
+  }
+  .tl-line {
+    position: absolute; left: 0; top: 0; right: 0; height: .5px;
+    background: var(--sep);
+  }
+  .tl-block {
+    position: absolute; left: 8px; right: 4px;
+    border-radius: 8px; padding: 5px 8px;
+    font-size: 10px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+    overflow: hidden;
+  }
+  .tl-block.workout-bjj {
+    background: rgba(76,175,114,.12);
+    border: 1px solid rgba(76,175,114,.3);
+    color: var(--bjj);
+  }
+  .tl-block.workout-strength {
+    background: rgba(201,168,76,.12);
+    border: 1px solid rgba(201,168,76,.3);
+    color: var(--strength);
+  }
+  .tl-block.meal {
+    background: var(--surfaceHi);
+    border: .5px solid var(--sep);
+    color: var(--text1);
+    font-weight: 500;
+  }
+  .tl-block .tl-dot { width: 3px; height: 100%; position: absolute; left: 0; top: 0; border-radius: 8px 0 0 8px; }
+  .tl-block.meal .tl-dot { background: var(--accent); }
+  .tl-block.workout-bjj .tl-dot { background: var(--bjj); }
+  .tl-block.workout-strength .tl-dot { background: var(--strength); }
+  .tl-block-time { color: var(--accent); margin-left: auto; font-size: 9px; font-weight: 700; }
+  .tl-block-time.workout-t { color: var(--bjj); }
+  .now-line {
+    position: absolute; left: 8px; right: 4px; height: 1px;
+    background: rgba(255,50,50,.7);
+    display: flex; align-items: center;
+  }
+  .now-dot { width: 7px; height: 7px; border-radius: 50%; background: red; margin-left: -3px; flex-shrink: 0; }
+  .now-label { font-size: 7px; font-weight: 800; color: red; position: absolute; right: 4px; }
+
+  /* Day strip */
+  .day-strip {
+    display: flex; gap: 5px; padding: 0 14px 10px; overflow: hidden;
+  }
+  .day-chip {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    padding: 7px 0; border-radius: 12px; background: var(--surface);
+    border: .5px solid var(--sep);
+    cursor: pointer;
+  }
+  .day-chip.active { background: var(--accent); border-color: var(--accent); }
+  .day-chip .wd { font-size: 8px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
+  .day-chip.active .wd { color: rgba(255,255,255,.7); }
+  .day-chip .dd { font-size: 16px; font-weight: 900; color: var(--text1); line-height: 1.2; }
+  .day-chip.active .dd { color: #fff; }
+  .day-chip .dot { width: 5px; height: 5px; border-radius: 50%; background: transparent; margin-top: 3px; }
+  .day-chip.active .dot { background: rgba(255,255,255,.6); }
+  .day-chip.has-workout .dot { background: var(--accent); }
+  .day-chip.active.has-workout .dot { background: #fff; }
+
+  .plan-toolbar {
+    display: flex; gap: 8px; padding: 0 14px 8px; align-items: center;
+  }
+  .btn-add {
+    background: linear-gradient(135deg, var(--accent), var(--accentDim));
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 6px 14px; border-radius: 20px; border: none;
+    display: flex; align-items: center; gap: 4px; cursor: pointer;
+  }
+  .btn-icon {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--surfaceHi); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--text2); margin-left: auto;
+  }
+
+  /* ─── Progress charts ────────────────────────────────────────────────── */
+  .chart-area { padding: 6px 0 0; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 5px; height: 80px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    background: var(--surfaceHi);
+    transition: height .8s cubic-bezier(.4,0,.2,1);
+    min-height: 4px;
+    position: relative;
+  }
+  .bar.hit { background: linear-gradient(to top, var(--accentDim), var(--accent)); }
+  .bar-day { font-size: 8px; color: var(--text3); }
+  .line-chart { position: relative; height: 64px; margin-top: 6px; }
+  .line-chart svg { width: 100%; height: 100%; overflow: visible; }
+
+  .stat-row { display: flex; gap: 8px; }
+  .stat-pill {
+    flex: 1; background: var(--surface); border-radius: 12px;
+    padding: 10px 8px; text-align: center;
+    border: .5px solid var(--sep);
+  }
+  .stat-val { font-size: 20px; font-weight: 900; color: var(--text1); }
+  .stat-lbl { font-size: 9px; color: var(--text2); margin-top: 1px; }
+  .stat-ico { font-size: 14px; margin-bottom: 3px; }
+
+  .donut-row { display: flex; gap: 8px; margin-top: 8px; }
+  .donut-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .donut-wrap svg { width: 72px; height: 72px; }
+  .donut-wrap .donut-lbl { font-size: 9px; color: var(--text2); }
+  .donut-center-text { font-size: 14px; font-weight: 900; fill: var(--text1); }
+  .donut-center-sub  { font-size: 8px; fill: var(--text3); }
+
+  /* ─── Recovery card (in settings-like view) ─────────────────────────── */
+  .recovery-card { display: flex; align-items: center; gap: 12px; }
+  .rec-left { flex: 1; }
+  .rec-title { font-size: 12px; font-weight: 700; color: var(--text1); }
+  .rec-sub   { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  .rec-ring  { width: 52px; height: 52px; flex-shrink: 0; }
+
+  /* ─── Onboarding screen ──────────────────────────────────────────────── */
+  .onb-hero { display: flex; flex-direction: column; align-items: center; padding: 8px 14px 0; gap: 6px; }
+  .onb-logo {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--accent), var(--accentDim));
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 0 28px rgba(76,175,114,.4);
+    margin-bottom: 4px;
+  }
+  .onb-title { font-size: 22px; font-weight: 900; letter-spacing: 4px; color: var(--text1); }
+  .onb-sub   { font-size: 12px; color: var(--text2); text-align: center; line-height: 1.5; }
+  .onb-features { width: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .onb-feat {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border-radius: 12px;
+    padding: 9px 12px; border: .5px solid var(--sep);
+    font-size: 11px; color: var(--text2);
+  }
+  .onb-feat-icon { color: var(--accent); font-size: 13px; width: 16px; }
+  .onb-dots { display: flex; gap: 5px; margin-top: 12px; }
+  .onb-dot { height: 7px; border-radius: 4px; background: var(--surfaceHi); }
+  .onb-dot.active { width: 22px; background: var(--accent); }
+  .onb-dot:not(.active) { width: 7px; }
+  .onb-btn {
+    width: calc(100% - 28px); margin: 12px 14px 0;
+    background: linear-gradient(135deg, var(--accent), var(--accentDim));
+    color: #fff; font-size: 14px; font-weight: 700;
+    padding: 14px; border-radius: 14px; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    box-shadow: 0 6px 20px rgba(76,175,114,.3);
+  }
+
+  /* ─── Widget showcase ────────────────────────────────────────────────── */
+  .widget-section { margin-top: 60px; }
+  .widget-section h2 {
+    text-align: center; font-size: 18px; font-weight: 800;
+    color: var(--text1); letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .widget-section p { text-align: center; color: var(--text2); font-size: 13px; margin-bottom: 32px; }
+  .widgets-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .widget-frame {
+    background: #1a1a1c;
+    border: 1.5px solid #2a2a2e;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0,0,0,.7);
+  }
+  .widget-sm { width: 155px; height: 155px; }
+  .widget-md { width: 326px; height: 155px; }
+  .widget-lg { width: 326px; height: 326px; }
+  .widget-inner { background: var(--bg); width: 100%; height: 100%; padding: 14px; }
+
+  .w-ring-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 6px; }
+  .w-streak { display: flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: var(--text1); }
+  .w-streak span { color: orange; }
+
+  /* Medium widget */
+  .w-md-inner { display: flex; align-items: center; gap: 16px; height: 100%; }
+  .w-checklist { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .w-check-label { font-size: 9px; font-weight: 800; color: var(--accent); letter-spacing: 1.5px; margin-bottom: 2px; }
+  .w-check-row { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+  .w-check-row.done { color: var(--text3); text-decoration: line-through; }
+  .w-check-row:not(.done) { color: var(--text1); font-weight: 600; }
+  .w-check-ico { font-size: 11px; }
+  .w-check-ico.done { color: var(--accent); }
+  .w-check-ico:not(.done) { color: var(--text3); }
+
+  /* Large widget */
+  .w-lg-inner { display: flex; flex-direction: column; height: 100%; gap: 10px; }
+  .w-header { display: flex; justify-content: space-between; align-items: center; }
+  .w-brand { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 2px; }
+  .w-steps-big { font-size: 26px; font-weight: 900; color: var(--text1); }
+  .w-progress-bar-wrap { display: flex; flex-direction: column; gap: 3px; }
+  .w-pct { font-size: 12px; font-weight: 700; color: var(--accent); }
+  .w-bar-track { background: var(--surfaceHi); height: 7px; border-radius: 4px; overflow: hidden; }
+  .w-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(to right, var(--accent), var(--accentDim)); }
+  .w-divider { border: none; border-top: .5px solid var(--sep); }
+  .w-cl-items { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+  .w-cl-header { font-size: 9px; font-weight: 700; color: var(--text2); }
+
+  /* ─── Watch showcase ─────────────────────────────────────────────────── */
+  .watch-section { margin-top: 60px; }
+  .watch-section h2 {
+    text-align: center; font-size: 18px; font-weight: 800;
+    color: var(--text1); letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .watch-section p { text-align: center; color: var(--text2); font-size: 13px; margin-bottom: 32px; }
+  .watches-row { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; align-items: flex-start; }
+  .watch-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .watch-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; }
+  .watch-frame {
+    width: 176px;
+    background: #1a1a1c;
+    border-radius: 44px;
+    border: 2px solid #2a2a2e;
+    box-shadow: 0 20px 50px rgba(0,0,0,.85), 0 4px 12px rgba(0,0,0,.5);
+    overflow: hidden;
+  }
+  .watch-screen {
+    background: #000;
+    border-radius: 42px;
+    padding: 20px 16px;
+    min-height: 192px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .watch-brand { font-size: 9px; font-weight: 900; color: var(--accent); letter-spacing: 2px; }
+  .watch-ring-wrap { position: relative; width: 88px; height: 88px; }
+  .watch-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .watch-steps { font-size: 18px; font-weight: 900; color: #fff; line-height: 1; }
+  .watch-lbl { font-size: 8px; color: #555; }
+  .watch-goal { font-size: 10px; color: #666; }
+  .watch-streak { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #fff; }
+  .watch-streak span { font-size: 14px; }
+  .watch-mini-bar { width: 100%; }
+  .watch-bar-label { font-size: 8px; color: #555; margin-bottom: 3px; }
+  .watch-bar-bg { background: #1a1a1a; height: 5px; border-radius: 3px; overflow: hidden; }
+  .watch-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+  /* Watch checklist */
+  .watch-cl { width: 100%; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+  .watch-cl-title { font-size: 12px; font-weight: 800; color: #fff; align-self: flex-start; }
+  .watch-cl-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .watch-cl-item.done { color: #444; text-decoration: line-through; }
+  .watch-cl-item:not(.done) { color: #fff; font-weight: 600; }
+  .watch-cl-ico { font-size: 14px; }
+  .watch-cl-ico.done { color: var(--accent); }
+  .watch-cl-ico:not(.done) { color: #333; }
+
+  /* ─── Footer ─────────────────────────────────────────────────────────── */
+  .footer { text-align: center; margin-top: 72px; color: var(--text3); font-size: 11px; letter-spacing: 1px; }
+  .footer strong { color: var(--accent); }
+
+  /* ─── Animations ─────────────────────────────────────────────────────── */
+  @keyframes pulseRing {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .5; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .phone-wrap { animation: fadeUp .5s ease both; }
+  .phone-wrap:nth-child(1) { animation-delay: .05s; }
+  .phone-wrap:nth-child(2) { animation-delay: .15s; }
+  .phone-wrap:nth-child(3) { animation-delay: .25s; }
+  .phone-wrap:nth-child(4) { animation-delay: .35s; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── Brand header ─────────────────────────────────────────── -->
+  <div class="brand-header">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <h1>PRIME CUT</h1>
+    </div>
+    <p>Metabolic priming · Workout planning · Nutrition timing</p>
+  </div>
+
+  <!-- ─── 4 Phone screens ──────────────────────────────────────── -->
+  <div class="screens-grid">
+
+    <!-- ════ SCREEN 1: DASHBOARD ════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons">
+              <span>●●●</span>
+              <span>WiFi</span>
+              <span>🔋</span>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <div>
+              <div class="nav-title">PRIME CUT</div>
+              <div class="nav-subtitle">Tuesday, May 12</div>
+            </div>
+            <div class="nav-chip">⚡ AUTO</div>
+          </div>
+          <div class="screen-content">
+
+            <!-- Step ring hero -->
+            <div class="ring-hero">
+              <div class="ring-container">
+                <svg class="ring-svg" viewBox="0 0 148 148">
+                  <defs>
+                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%"   stop-color="#4CAF72"/>
+                      <stop offset="100%" stop-color="#2D8B52"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="ring-track"    cx="74" cy="74" r="65"/>
+                  <circle class="ring-progress" cx="74" cy="74" r="65" id="mainRing"/>
+                </svg>
+                <div class="ring-center">
+                  <div class="ring-steps" id="ringSteps">6,240</div>
+                  <div class="ring-label">of 8,000</div>
+                  <div class="ring-label">steps</div>
+                </div>
+              </div>
+              <div class="ring-sub">1,760 steps to go</div>
+            </div>
+
+            <!-- Streak -->
+            <div class="card">
+              <div class="streak-row">
+                <div class="streak-icon">🔥</div>
+                <div>
+                  <div>
+                    <span class="streak-num">12</span>
+                    <span class="streak-word">day streak</span>
+                  </div>
+                  <div class="streak-msg">Two weeks locked in. Elite level.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Checklist -->
+            <div class="card">
+              <div class="card-title">Today's Checklist</div>
+              <div class="checklist">
+                <div class="check-row">
+                  <div class="check-box done">✓</div>
+                  <div class="check-label done">Breakfast</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-box done">✓</div>
+                  <div class="check-label done">Lunch</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-box"></div>
+                  <div class="check-label">Dinner</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-box done">✓</div>
+                  <div class="check-label done">Workout</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-box"></div>
+                  <div class="check-label">Step Goal</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Today's plan -->
+            <div class="card">
+              <div class="card-title">Today's Plan</div>
+              <div class="workout-row">
+                <div class="workout-icon bjj">🥋</div>
+                <div>
+                  <div class="workout-name">Brazilian Jiu-Jitsu</div>
+                  <div class="workout-time">6:00 PM · 75 min</div>
+                </div>
+              </div>
+              <div class="meal-key-row"><span class="meal-icon">⚡</span><span class="meal-name">Pre-Workout</span><span class="meal-time">4:45 PM</span></div>
+              <div class="meal-key-row"><span class="meal-icon">🔥</span><span class="meal-name">Post-Workout</span><span class="meal-time">7:30 PM</span></div>
+              <div class="auto-bar">
+                <span class="auto-icon">↑</span>
+                <span class="auto-text">Auto: Increase Carbs</span>
+                <span class="auto-sub">BJJ day</span>
+              </div>
+            </div>
+
+          </div><!-- screen-content -->
+
+          <div class="tab-bar">
+            <div class="tab-item active"><div class="tab-icon">⌂</div><span>Dashboard</span></div>
+            <div class="tab-item"><div class="tab-icon">📅</div><span>Planner</span></div>
+            <div class="tab-item"><div class="tab-icon">📈</div><span>Progress</span></div>
+            <div class="tab-item"><div class="tab-icon">⚙</div><span>Settings</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Dashboard</div>
+    </div>
+
+    <!-- ════ SCREEN 2: PLANNER ════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons"><span>●●●</span><span>🔋</span></div>
+          </div>
+          <div class="nav-bar">
+            <div style="font-size:16px;font-weight:800;color:var(--text1)">Planner</div>
+            <div style="background:var(--surfaceHi);color:var(--text2);font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;">TUE</div>
+          </div>
+
+          <!-- Day strip -->
+          <div class="day-strip">
+            <div class="day-chip"><div class="wd">SAT</div><div class="dd">9</div><div class="dot"></div></div>
+            <div class="day-chip"><div class="wd">SUN</div><div class="dd">10</div><div class="dot has-workout" style="background:var(--accent)"></div></div>
+            <div class="day-chip has-workout"><div class="wd">MON</div><div class="dd">11</div><div class="dot" style="background:var(--accent)"></div></div>
+            <div class="day-chip active has-workout"><div class="wd">TUE</div><div class="dd">12</div><div class="dot"></div></div>
+            <div class="day-chip"><div class="wd">WED</div><div class="dd">13</div><div class="dot"></div></div>
+            <div class="day-chip"><div class="wd">THU</div><div class="dd">14</div><div class="dot"></div></div>
+            <div class="day-chip"><div class="wd">FRI</div><div class="dd">15</div><div class="dot"></div></div>
+          </div>
+
+          <div class="plan-toolbar">
+            <button class="btn-add">＋ Add Workout</button>
+            <button class="btn-icon">🕒</button>
+            <button class="btn-icon">🛒</button>
+          </div>
+
+          <div class="screen-content" style="padding-bottom:0;">
+            <!-- Timeline -->
+            <div style="position:relative;overflow:hidden;">
+              <div class="timeline" style="font-size:11px;">
+
+                <!-- 4 PM -->
+                <div class="tl-hour" style="height:44px;">
+                  <div class="tl-hour-label">4PM</div>
+                  <div class="tl-line"></div>
+                </div>
+
+                <!-- Pre-workout meal at 4:45 -->
+                <div class="tl-hour" style="height:44px;position:relative;">
+                  <div class="tl-hour-label">5PM</div>
+                  <div class="tl-line"></div>
+                  <div class="tl-block meal" style="top:4px;height:30px;">
+                    <div class="tl-dot"></div>
+                    <span>⚡</span>
+                    <span style="color:var(--text1)">Pre-Workout</span>
+                    <span class="tl-block-time">4:45</span>
+                  </div>
+                </div>
+
+                <!-- 6 PM = BJJ workout (2 rows tall) -->
+                <div style="position:relative;height:88px;">
+                  <div class="tl-hour" style="height:44px;">
+                    <div class="tl-hour-label">6PM</div>
+                    <div class="tl-line"></div>
+                  </div>
+                  <div class="tl-hour" style="height:44px;">
+                    <div class="tl-hour-label">7PM</div>
+                    <div class="tl-line"></div>
+                  </div>
+                  <div class="tl-block workout-bjj" style="top:2px;height:80px;position:absolute;left:8px;right:4px;">
+                    <div class="tl-dot"></div>
+                    <span>🥋</span>
+                    <div>
+                      <div>BJJ</div>
+                      <div style="font-size:9px;color:var(--text2);font-weight:400;">6:00 – 7:15 PM</div>
+                    </div>
+                    <span class="tl-block-time workout-t" style="color:var(--bjj);">75m</span>
+                  </div>
+                </div>
+
+                <!-- Post-workout at 7:30 -->
+                <div class="tl-hour" style="height:44px;position:relative;">
+                  <div class="tl-line"></div>
+                  <div class="tl-block meal" style="top:10px;height:30px;">
+                    <div class="tl-dot"></div>
+                    <span>🔥</span>
+                    <span style="color:var(--text1)">Post-Workout</span>
+                    <span class="tl-block-time">7:30</span>
+                  </div>
+                </div>
+
+                <!-- 8 PM = Dinner -->
+                <div class="tl-hour" style="height:44px;position:relative;">
+                  <div class="tl-hour-label">8PM</div>
+                  <div class="tl-line"></div>
+                  <div class="tl-block meal" style="top:14px;height:26px;">
+                    <div class="tl-dot"></div>
+                    <span>🌙</span>
+                    <span style="color:var(--text1)">Dinner</span>
+                    <span class="tl-block-time">8:00</span>
+                  </div>
+                </div>
+
+                <!-- Now line around 7:45 -->
+                <div style="position:absolute;top:256px;left:8px;right:4px;display:flex;align-items:center;">
+                  <div style="width:7px;height:7px;border-radius:50%;background:red;flex-shrink:0;"></div>
+                  <div style="flex:1;height:1px;background:rgba(255,50,50,.7);"></div>
+                  <div style="font-size:7px;font-weight:800;color:red;">NOW</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-bar">
+            <div class="tab-item"><div class="tab-icon">⌂</div><span>Dashboard</span></div>
+            <div class="tab-item active"><div class="tab-icon">📅</div><span>Planner</span></div>
+            <div class="tab-item"><div class="tab-icon">📈</div><span>Progress</span></div>
+            <div class="tab-item"><div class="tab-icon">⚙</div><span>Settings</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Planner</div>
+    </div>
+
+    <!-- ════ SCREEN 3: PROGRESS ════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons"><span>●●●</span><span>🔋</span></div>
+          </div>
+          <div class="nav-bar">
+            <div style="font-size:16px;font-weight:800;color:var(--text1)">Progress</div>
+          </div>
+          <div class="screen-content">
+
+            <!-- Stat pills row -->
+            <div class="stat-row">
+              <div class="stat-pill">
+                <div class="stat-ico">✅</div>
+                <div class="stat-val">87%</div>
+                <div class="stat-lbl">Adherence</div>
+              </div>
+              <div class="stat-pill">
+                <div class="stat-ico">🏋️</div>
+                <div class="stat-val">71%</div>
+                <div class="stat-lbl">Workouts</div>
+              </div>
+              <div class="stat-pill">
+                <div class="stat-ico">🔥</div>
+                <div class="stat-val">12</div>
+                <div class="stat-lbl">Streak</div>
+              </div>
+            </div>
+
+            <!-- Adherence line chart -->
+            <div class="card">
+              <div class="card-title">Weekly Adherence</div>
+              <div class="line-chart">
+                <svg viewBox="0 0 240 64" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"   stop-color="#4CAF72" stop-opacity=".4"/>
+                      <stop offset="100%" stop-color="#4CAF72" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,28 C30,20 60,12 80,16 C100,20 120,8 140,12 C160,16 180,4 200,8 C220,12 235,6 240,4"
+                        fill="none" stroke="#4CAF72" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M0,28 C30,20 60,12 80,16 C100,20 120,8 140,12 C160,16 180,4 200,8 C220,12 235,6 240,4 L240,64 L0,64 Z"
+                        fill="url(#areaGrad)"/>
+                  <circle cx="0"   cy="28" r="3" fill="#4CAF72"/>
+                  <circle cx="40"  cy="20" r="3" fill="#4CAF72"/>
+                  <circle cx="80"  cy="16" r="3" fill="#4CAF72"/>
+                  <circle cx="120" cy="8"  r="3" fill="#4CAF72"/>
+                  <circle cx="160" cy="12" r="3" fill="#4CAF72"/>
+                  <circle cx="200" cy="8"  r="3" fill="#4CAF72"/>
+                  <circle cx="240" cy="4"  r="3" fill="#4CAF72"/>
+                </svg>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                <span style="font-size:9px;color:var(--text3)">Mon</span>
+                <span style="font-size:9px;color:var(--text3)">Tue</span>
+                <span style="font-size:9px;color:var(--text3)">Wed</span>
+                <span style="font-size:9px;color:var(--text3)">Thu</span>
+                <span style="font-size:9px;color:var(--text3)">Fri</span>
+                <span style="font-size:9px;color:var(--text3)">Sat</span>
+                <span style="font-size:9px;color:var(--text3)">Sun</span>
+              </div>
+            </div>
+
+            <!-- Step bar chart -->
+            <div class="card">
+              <div class="card-title">Daily Steps</div>
+              <div class="bar-chart" id="barChart">
+                <div class="bar-col"><div class="bar" style="height:52px;"></div><div class="bar-day">M</div></div>
+                <div class="bar-col"><div class="bar hit" style="height:68px;"></div><div class="bar-day">T</div></div>
+                <div class="bar-col"><div class="bar hit" style="height:80px;"></div><div class="bar-day">W</div></div>
+                <div class="bar-col"><div class="bar" style="height:40px;"></div><div class="bar-day">T</div></div>
+                <div class="bar-col"><div class="bar hit" style="height:72px;"></div><div class="bar-day">F</div></div>
+                <div class="bar-col"><div class="bar hit" style="height:60px;"></div><div class="bar-day">S</div></div>
+                <div class="bar-col"><div class="bar" style="height:48px;"></div><div class="bar-day">S</div></div>
+              </div>
+              <div style="font-size:9px;color:var(--accent);margin-top:4px;">● goal line = 8,000</div>
+            </div>
+
+            <!-- Donut row -->
+            <div class="donut-row">
+              <div class="donut-wrap">
+                <svg viewBox="0 0 72 72">
+                  <circle cx="36" cy="36" r="28" fill="none" stroke="#1C1C1E" stroke-width="8"/>
+                  <circle cx="36" cy="36" r="28" fill="none" stroke="url(#dg1)" stroke-width="8"
+                    stroke-linecap="round"
+                    stroke-dasharray="176" stroke-dashoffset="50"
+                    transform="rotate(-90 36 36)"/>
+                  <defs>
+                    <linearGradient id="dg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4CAF72"/><stop offset="100%" stop-color="#2D8B52"/>
+                    </linearGradient>
+                  </defs>
+                  <text x="36" y="33" text-anchor="middle" class="donut-center-text" font-size="14" font-weight="900" fill="#F5F5F5">71%</text>
+                  <text x="36" y="44" text-anchor="middle" class="donut-center-sub" font-size="8" fill="#8E8E93">done</text>
+                </svg>
+                <div class="donut-lbl">Workouts</div>
+              </div>
+              <div class="donut-wrap">
+                <svg viewBox="0 0 72 72">
+                  <circle cx="36" cy="36" r="28" fill="none" stroke="#1C1C1E" stroke-width="8"/>
+                  <circle cx="36" cy="36" r="28" fill="none" stroke="url(#dg2)" stroke-width="8"
+                    stroke-linecap="round"
+                    stroke-dasharray="176" stroke-dashoffset="44"
+                    transform="rotate(-90 36 36)"/>
+                  <defs>
+                    <linearGradient id="dg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#FF453A"/><stop offset="50%" stop-color="#FF9F0A"/><stop offset="100%" stop-color="#4CAF72"/>
+                    </linearGradient>
+                  </defs>
+                  <text x="36" y="33" text-anchor="middle" font-size="14" font-weight="900" fill="#F5F5F5">74</text>
+                  <text x="36" y="44" text-anchor="middle" font-size="8" fill="#8E8E93">/ 100</text>
+                </svg>
+                <div class="donut-lbl">Recovery</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="tab-bar">
+            <div class="tab-item"><div class="tab-icon">⌂</div><span>Dashboard</span></div>
+            <div class="tab-item"><div class="tab-icon">📅</div><span>Planner</span></div>
+            <div class="tab-item active"><div class="tab-icon">📈</div><span>Progress</span></div>
+            <div class="tab-item"><div class="tab-icon">⚙</div><span>Settings</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Progress</div>
+    </div>
+
+    <!-- ════ SCREEN 4: ONBOARDING ════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons"><span>●●●</span><span>🔋</span></div>
+          </div>
+
+          <div class="onb-hero">
+            <!-- Progress dots -->
+            <div class="onb-dots">
+              <div class="onb-dot active"></div>
+              <div class="onb-dot"></div>
+              <div class="onb-dot"></div>
+              <div class="onb-dot"></div>
+              <div class="onb-dot"></div>
+            </div>
+
+            <div style="height:20px;"></div>
+
+            <!-- Logo -->
+            <div class="onb-logo">⚡</div>
+            <div class="onb-title">PRIME CUT</div>
+            <div class="onb-sub">Metabolic priming for<br>serious athletes.</div>
+
+            <!-- Feature list -->
+            <div class="onb-features">
+              <div class="onb-feat">
+                <span class="onb-feat-icon">⚡</span>
+                Auto meal timing around your training
+              </div>
+              <div class="onb-feat">
+                <span class="onb-feat-icon">🥋</span>
+                Built for BJJ, lifting, and walking
+              </div>
+              <div class="onb-feat">
+                <span class="onb-feat-icon">❤️</span>
+                Adapts to recovery and step count
+              </div>
+            </div>
+          </div>
+
+          <button class="onb-btn">Continue →</button>
+
+        </div>
+      </div>
+      <div class="phone-label">Onboarding</div>
+    </div>
+
+  </div><!-- screens-grid -->
+
+
+  <!-- ─── Widget showcase ──────────────────────────────────────── -->
+  <div class="widget-section">
+    <h2>WIDGETS</h2>
+    <p>Live step ring and checklist — all three sizes, always up to date.</p>
+    <div class="widgets-row">
+
+      <!-- Small: step ring -->
+      <div class="widget-frame widget-sm">
+        <div class="widget-inner w-ring-wrap">
+          <svg width="90" height="90" style="transform:rotate(-90deg)">
+            <circle cx="45" cy="45" r="36" fill="none" stroke="#1C1C1E" stroke-width="9"/>
+            <circle cx="45" cy="45" r="36" fill="none" stroke="url(#wRingGrad)" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="57"/>
+            <defs>
+              <linearGradient id="wRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4CAF72"/><stop offset="100%" stop-color="#2D8B52"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+            <div style="font-size:17px;font-weight:900;color:#F5F5F5;line-height:1;">6.2k</div>
+            <div style="font-size:9px;color:#8E8E93;">steps</div>
+          </div>
+          <div class="w-streak"><span>🔥</span> 12d</div>
+        </div>
+      </div>
+
+      <!-- Medium: ring + checklist -->
+      <div class="widget-frame widget-md">
+        <div class="widget-inner">
+          <div class="w-md-inner">
+            <div style="position:relative;width:80px;height:80px;flex-shrink:0;">
+              <svg width="80" height="80" style="transform:rotate(-90deg)">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#1C1C1E" stroke-width="8"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="url(#wRingGrad2)" stroke-width="8"
+                  stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="51"/>
+                <defs>
+                  <linearGradient id="wRingGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4CAF72"/><stop offset="100%" stop-color="#2D8B52"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                <div style="font-size:16px;font-weight:900;color:#F5F5F5;line-height:1;">78%</div>
+                <div style="font-size:8px;color:#8E8E93;">steps</div>
+              </div>
+            </div>
+            <div class="w-checklist">
+              <div class="w-check-label">TODAY</div>
+              <div class="w-check-row done"><span class="w-check-ico done">✅</span> Breakfast</div>
+              <div class="w-check-row done"><span class="w-check-ico done">✅</span> Lunch</div>
+              <div class="w-check-row"><span class="w-check-ico">○</span> Dinner</div>
+              <div class="w-check-row done"><span class="w-check-ico done">✅</span> Workout</div>
+              <div class="w-check-row"><span class="w-check-ico">○</span> Step Goal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Large: full snapshot -->
+      <div class="widget-frame widget-lg">
+        <div class="widget-inner">
+          <div class="w-lg-inner">
+            <div class="w-header">
+              <div class="w-brand">PRIME CUT</div>
+              <div class="w-streak"><span style="font-size:12px;">🔥</span> 12 day streak</div>
+            </div>
+            <div class="w-progress-bar-wrap">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <div class="w-steps-big">6,240</div>
+                <div class="w-pct">78%</div>
+              </div>
+              <div class="w-bar-track"><div class="w-bar-fill" style="width:78%;"></div></div>
+              <div style="font-size:9px;color:var(--text3);margin-top:2px;">1,760 steps to go today</div>
+            </div>
+            <hr class="w-divider">
+            <div class="w-cl-header">CHECKLIST &nbsp; 3/5 done</div>
+            <div class="w-cl-items">
+              <div class="w-check-row done"><span class="w-check-ico done">✅</span> Breakfast</div>
+              <div class="w-check-row done"><span class="w-check-ico done">✅</span> Lunch</div>
+              <div class="w-check-row" style="font-size:12px;color:var(--text1);font-weight:600;"><span style="font-size:12px;color:#333;">○</span> &nbsp;Dinner</div>
+              <div class="w-check-row done"><span class="w-check-ico done">✅</span> Workout</div>
+              <div class="w-check-row" style="font-size:12px;color:var(--text1);font-weight:600;"><span style="font-size:12px;color:#333;">○</span> &nbsp;Step Goal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ─── Watch showcase ───────────────────────────────────────── -->
+  <div class="watch-section">
+    <h2>APPLE WATCH</h2>
+    <p>Step ring glance and checklist — always on your wrist.</p>
+    <div class="watches-row">
+
+      <!-- Watch 1: Dashboard -->
+      <div class="watch-wrap">
+        <div class="watch-frame">
+          <div class="watch-screen">
+            <div class="watch-brand">PRIME CUT</div>
+            <div style="position:relative;width:88px;height:88px;">
+              <svg class="watch-ring-svg" width="88" height="88" style="transform:rotate(-90deg)">
+                <circle cx="44" cy="44" r="36" fill="none" stroke="#1a1a1a" stroke-width="9"/>
+                <circle cx="44" cy="44" r="36" fill="none" stroke="url(#wRing3)" stroke-width="9"
+                  stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="57"/>
+                <defs>
+                  <linearGradient id="wRing3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4CAF72"/><stop offset="100%" stop-color="#2D8B52"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                <div class="watch-steps">6.2k</div>
+                <div class="watch-lbl">steps</div>
+              </div>
+            </div>
+            <div class="watch-goal">1,760 to go</div>
+            <div class="watch-streak"><span>🔥</span> 12 day streak</div>
+            <div class="watch-mini-bar">
+              <div class="watch-bar-label">3/5 tasks done</div>
+              <div class="watch-bar-bg"><div class="watch-bar-fill" style="width:60%;"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="watch-label">Dashboard</div>
+      </div>
+
+      <!-- Watch 2: Checklist -->
+      <div class="watch-wrap">
+        <div class="watch-frame">
+          <div class="watch-screen">
+            <div class="watch-brand">TODAY</div>
+            <div class="watch-cl">
+              <div class="watch-cl-title">Checklist</div>
+              <div class="watch-cl-item done"><span class="watch-cl-ico done">✅</span> Breakfast</div>
+              <div class="watch-cl-item done"><span class="watch-cl-ico done">✅</span> Lunch</div>
+              <div class="watch-cl-item"><span class="watch-cl-ico">○</span> Dinner</div>
+              <div class="watch-cl-item done"><span class="watch-cl-ico done">✅</span> Workout</div>
+              <div class="watch-cl-item"><span class="watch-cl-ico">○</span> Step Goal</div>
+            </div>
+          </div>
+        </div>
+        <div class="watch-label">Checklist</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    Built with SwiftUI · HealthKit · Swift Charts · WidgetKit · CloudKit · WatchKit<br><br>
+    <strong>PRIME CUT</strong> &nbsp;v1.0
+  </div>
+
+</div><!-- page -->
+
+<script>
+  // Animate step ring on load
+  window.addEventListener('load', () => {
+    const ring = document.getElementById('mainRing');
+    const circumference = 2 * Math.PI * 65; // r=65
+    const progress = 6240 / 8000; // ~78%
+    const offset = circumference * (1 - progress);
+
+    // Start at 0
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = circumference;
+
+    // Animate to progress
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        ring.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        ring.style.strokeDashoffset = offset;
+      }, 300);
+    });
+
+    // Count up steps
+    const stepsEl = document.getElementById('ringSteps');
+    const target = 6240;
+    let current = 0;
+    const duration = 1800;
+    const start = performance.now() + 300;
+    function tick(now) {
+      const elapsed = Math.max(0, now - start);
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      current = Math.round(target * eased);
+      stepsEl.textContent = current.toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+</script>
+</body>
+</html>
